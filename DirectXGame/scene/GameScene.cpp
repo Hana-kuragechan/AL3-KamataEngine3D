@@ -11,12 +11,9 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
-<<<<<<< Updated upstream
 	textureHandle_ = TextureManager::Load("sample.png");
 	sprite_ = Sprite::Create(textureHandle_, {100, 50});
-=======
 
->>>>>>> Stashed changes
 }
 
 void GameScene::Update() { Vector2 position = sprite_->GetPosition();
