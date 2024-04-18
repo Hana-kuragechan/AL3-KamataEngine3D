@@ -7,7 +7,7 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-
+#include "DebugCamera.h"
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -15,7 +15,7 @@ class GameScene {
 
 	Sprite* sprite_ = nullptr;
 	Model* model_ = nullptr;
-
+	DebugCamera* debugCamera_ = nullptr;
 
 public: // メンバ関数
 	/// <summary>
