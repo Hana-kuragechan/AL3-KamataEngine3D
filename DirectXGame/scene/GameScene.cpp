@@ -1,25 +1,47 @@
 #include "GameScene.h"
 #include "TextureManager.h"
 #include <cassert>
+#include"ImGuiManager.h"
+#include"PrimitiveDrawer.h"
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() { delete sprite_; }
+GameScene::~GameScene() {
+	delete sprite_;
+	delete model_;
+}
 
 void GameScene::Initialize() {
 
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
+
 	textureHandle_ = TextureManager::Load("sample.png");
 	sprite_ = Sprite::Create(textureHandle_, {100, 50});
-
+	model_ = Model::Create();
+	worldTransform_.Initialize();
+	viewProjection_.Initialize();
+	soundDataHandle_ = audio_->LoadWave("fanfare.wav");
+	/*audio_->PlayWave(soundDataHandle_);*/
+	voiceHandle_ = audio_->PlayWave(soundDataHandle_, true);
+	PrimitiveDrawer::GetInstance()->SetViewProjection(&viewProjection_);
 }
 
 void GameScene::Update() { Vector2 position = sprite_->GetPosition();
 	position.x += 2.0f;
 	position.y += 1.0f;
 	sprite_->SetPosition(position);
+	if (input_->TriggerKey(DIK_SPACE)) {
+		audio_->StopWave(voiceHandle_);
+	}
+	ImGui::Begin("Debug1");
+	ImGui::Text("Kamata Tarou %d,%d,%d,2050,12,31");
+	ImGui::InputFloat3("InputFloat3", inputFloat3);
+	ImGui::SliderFloat3("sliderFoat3", inputFloat3, 0.0f, 1.0f);
+	ImGui::ShowDemoWindow();
+	ImGui::End();
+
 }
 
 void GameScene::Draw() {
@@ -48,7 +70,8 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-
+	model_->Draw(worldTransform_, viewProjection_, textureHandle_);
+	PrimitiveDrawer::GetInstance()->DrawLine3d({0, 0, 0}, {0, 10, 0}, {1.0f, 0.0f, 0.0f, 1.0f});
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
