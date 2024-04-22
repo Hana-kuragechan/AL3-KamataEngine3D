@@ -7,12 +7,14 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "Player.h"
 
 /// <summary>
 /// ゲームシーン
 /// </summary>
 class GameScene {
 	Model* model_ = nullptr;
+	Player* player_ = nullptr;
 
 public: // メンバ関数
 	/// <summary>
