@@ -12,6 +12,7 @@
 /// ゲームシーン
 /// </summary>
 class GameScene {
+	Model* model_ = nullptr;
 
 public: // メンバ関数
 	/// <summary>
@@ -43,7 +44,10 @@ private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
-
+	
+	uint32_t textureHandle_ = 0;
+	ViewProjection viewProjection_;
+	
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
