@@ -6,7 +6,7 @@ public:
 	/// <summary>
 	///初期化処理
 	/// </summary>
-	void Initialize(Model*model,uint32_t textureHandle);
+	void Initialize(Model*model,uint32_t textureHandle,ViewProjection*viewProjection);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -20,4 +20,5 @@ private:
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
 	uint32_t textureHandle_ = 0u;
+	ViewProjection* viewProjection_ = nullptr;
 };
