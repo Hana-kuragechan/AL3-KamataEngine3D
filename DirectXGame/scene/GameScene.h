@@ -7,11 +7,14 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-
+#include<vector>
+#include"MT.h"
+#include"DebugCamera.h"
 /// <summary>
 /// ゲームシーン
 /// </summary>
 class GameScene {
+	
 
 public: // メンバ関数
 	/// <summary>
@@ -39,11 +42,20 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	std::vector<std::vector<WorldTransform*>>worldTransformBlocks_;
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 
+	uint32_t blockTextureHandle_ = 0;
+	Model* block_ = nullptr;
+	WorldTransform worldTransform_;
+	ViewProjection viewProjection_; 
+	bool isDebugCameraActive_ = false;
+	DebugCamera* debugCamera_ = nullptr;
+	
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
