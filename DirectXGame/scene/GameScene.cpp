@@ -15,6 +15,7 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	delete skydome_;
 	delete modelSkydome_;
+	delete mapChipFild_;
 }
 
 void GameScene::Initialize() {
@@ -31,6 +32,8 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_,&viewProjection_);
 	
+	mapChipFild_ = new MapChipField;
+	mapChipFild_->LoadMapChipcsv("Resources/blocks.csv");
 
 	/// 要素数
 	const uint32_t kNumBlockVirtical = 10;

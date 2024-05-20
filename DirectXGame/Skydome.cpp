@@ -1,8 +1,7 @@
 #include "Skydome.h"
 
-Skydome::Skydome() { 
-	
-}
+Skydome::Skydome() {}
+
 
 Skydome::~Skydome() {}
 
