@@ -20,6 +20,8 @@ public:
 	void LoadMapChipcsv(const std::string& filePath);
 	MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);
 	Vector3 GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex);
+	uint32_t GetNumBlockVirtical() { return kNumBlockVirtical; };
+	uint32_t GetNumBlockHorizontal() { return kNumBlockHorizontal; };
 
 private:
 

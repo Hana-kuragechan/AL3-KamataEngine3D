@@ -44,6 +44,7 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	void GenerateBlocks();
 	std::vector<std::vector<WorldTransform*>>worldTransformBlocks_;
 
 private: // メンバ変数
