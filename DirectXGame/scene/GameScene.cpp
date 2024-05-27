@@ -16,6 +16,7 @@ GameScene::~GameScene() {
 	delete skydome_;
 	delete modelSkydome_;
 	delete mapChipFild_;
+	delete player_;
 }
 
 void GameScene::Initialize() {
@@ -23,47 +24,33 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
-	blockTextureHandle_ = TextureManager::Load("cube/cube.jpg");
-	block_ = Model::Create();
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
+	//ブロック
+	blockTextureHandle_ = TextureManager::Load("cube/cube.jpg");
+	block_ = Model::Create();
+	mapChipFild_ = new MapChipField;
+	mapChipFild_->LoadMapChipcsv("Resources/blocks.csv");
+	GenerateBlocks();
 
+	//天球(背景)
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
-
-	mapChipFild_ = new MapChipField;
-	mapChipFild_->LoadMapChipcsv("Resources/blocks.csv");
-
-	/*/// 要素数
-	const uint32_t kNumBlockVirtical = 10;
-	const uint32_t kNumBlockHorizontal = 20;
-	/// ブロック1個分の横幅
-	const float kBlockWidth = 2.0f;
-	const float kBlockHeight = 2.0f;*/
-
-	GenerateBlocks();
-	/*worldTransformBlocks_.resize(kNumBlockHorizontal);
-	/// キューブの生成
-	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
-
-	    worldTransformBlocks_[i].resize(kNumBlockHorizontal);
-	}
-	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
-	    for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
-	        if (mapChipFild_->GetMapChipTypeByIndex(j,i)==MapChipType::kBlock) {
-	            WorldTransform* worldTransform = new WorldTransform();
-	            worldTransform->Initialize();
-	            worldTransformBlocks_[i][j] = worldTransform;
-	            worldTransformBlocks_[i][j]->translation_ = mapChipFild_->GetMapChipPositionByIndex(j, i);
-	        }
-	    }
-	}*/
-
+	//プレイヤー
+	textureHandle_ = TextureManager::Load("uvChecker.png");
+	modelPlayer_ = Model::Create();
+	player_ = new Player();
+	Vector3 playerPosition = mapChipFild_->GetMapChipPositionByIndex(2, 17);
+	player_->Initialize(modelPlayer_, textureHandle_, &viewProjection_,playerPosition);
+	
 	debugCamera_ = new DebugCamera(1280, 720);
 }
 
 void GameScene::Update() {
+
+	player_->Update();
+
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -74,6 +61,7 @@ void GameScene::Update() {
 			worldTransformBlock->TransferMatrix();
 		}
 	}
+
 	debugCamera_->Update();
 	if (isDebugCameraActive_) {
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
@@ -117,7 +105,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-
+	player_->Draw();
 	skydome_->Draw();
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
