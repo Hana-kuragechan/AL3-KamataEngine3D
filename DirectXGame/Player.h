@@ -18,6 +18,18 @@ public:
 
 private:
 
+	enum class LRDirection { 
+		kRight,
+		kLeft,
+	};
+	LRDirection lrDirection_ = LRDirection::kRight;
+	float turnFirstRotationY_ = 0.0f;
+	float turnTimer_ = 0.0f;
+	static inline const float kTimeTurn = 0.3f;
+	bool onGround_ = true;
+	static inline const float kGravityAcceleration = 0.1f;
+	static inline const float kLimitFallSpeed = 0.3f;
+	static inline const float kJumpAcceleration = 1.0f;
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
 	uint32_t textureHandle_ = 0u;

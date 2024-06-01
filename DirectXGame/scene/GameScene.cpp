@@ -38,10 +38,11 @@ void GameScene::Initialize() {
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
 	//プレイヤー
-	textureHandle_ = TextureManager::Load("uvChecker.png");
+	textureHandle_ = TextureManager::Load("cube/cube.jpg");
+	/*TextureManager::Load("uvChecker.png");*/
 	modelPlayer_ = Model::Create();
 	player_ = new Player();
-	Vector3 playerPosition = mapChipFild_->GetMapChipPositionByIndex(2, 17);
+	Vector3 playerPosition = mapChipFild_->GetMapChipPositionByIndex(2, 18);
 	player_->Initialize(modelPlayer_, textureHandle_, &viewProjection_,playerPosition);
 	
 	debugCamera_ = new DebugCamera(1280, 720);
