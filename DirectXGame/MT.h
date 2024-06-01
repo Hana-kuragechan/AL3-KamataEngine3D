@@ -116,5 +116,5 @@ return Multiply(Multiply(MakeRotateXMatrix(radian.x), MakeRotateYMatrix(radian.y
 }
 
 inline Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& translate,const Vector3& rotate) {
-	return Multiply(MakeScaleMatrix(scale),Multiply(MakeTranslateMatrix(translate),MakeRotateMatrix(rotate)));
+	return Multiply(MakeScaleMatrix(scale), Multiply(MakeRotateMatrix(rotate) ,MakeTranslateMatrix(translate)));
 }

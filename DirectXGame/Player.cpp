@@ -15,15 +15,7 @@ void Player::Initialize(Model* model, uint32_t textureHandle, ViewProjection* vi
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
 }
 
-//void Player::Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection, const Vector3& position) {
-//	assert(model);
-//	model_ = model;
-//	textureHandle_ = textureHandle;
-//	worldTransform_.Initialize();
-//	worldTransform_.translation_ = position;
-//	viewProjection_ = viewProjection;
-//	worldTransform_.rotation_.y = std::numbers::pi_v<float>/2.0f;
-//}
+
 
 void Player::Update() {
 
@@ -67,7 +59,7 @@ void Player::Update() {
 
 	} else {
 
-		/*velocity_ += Vector3(0, -kGravityAcceleration, 0);*/
+
 		velocity_=Vector3Add(velocity_, Vector3(0, -kGravityAcceleration, 0));
 		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
 	}
@@ -100,6 +92,8 @@ void Player::Update() {
 	
 	}
 	worldTransform_.translation_.x += velocity_.x;
+	worldTransform_.translation_.y += velocity_.y;
+	worldTransform_.translation_.z += velocity_.z;
 	worldTransform_.UpdateMatrix();
 }
 
