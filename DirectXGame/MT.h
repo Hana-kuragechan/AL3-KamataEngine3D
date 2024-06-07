@@ -1,19 +1,19 @@
 #pragma once
 #define _USE_MATH_DEFINES
+#include <assert.h>
 #include <cmath>
 #include <math.h>
-#include <assert.h>
 
-//struct Matrix4x4 {
+// struct Matrix4x4 {
 //	float m[4][4];
-//};
-//struct Vector3{
+// };
+// struct Vector3{
 //	float x;
 //	float y;
 //	float z;
-//};
+// };
 
-inline Vector3 Vector3Add(const Vector3 v1, const Vector3 v2) { 
+inline Vector3 Vector3Add(const Vector3 v1, const Vector3 v2) {
 	Vector3 result;
 
 	result.x = v1.x + v2.x;
@@ -60,7 +60,7 @@ inline Matrix4x4 MakeTranslateMatrix(Vector3 translate) {
 	result.m[3][2] = translate.z;
 	return result;
 }
-inline Matrix4x4 MakeScaleMatrix(Vector3 scale) { 
+inline Matrix4x4 MakeScaleMatrix(Vector3 scale) {
 	Matrix4x4 result{};
 
 	result.m[0][0] = scale.x;
@@ -83,8 +83,8 @@ inline Matrix4x4 MakeRotateXMatrix(float radian) {
 	return result;
 }
 
-inline Matrix4x4 MakeRotateYMatrix(float radian) { 
-	Matrix4x4 result{}; 
+inline Matrix4x4 MakeRotateYMatrix(float radian) {
+	Matrix4x4 result{};
 
 	result.m[0][0] = std::cos(radian);
 	result.m[0][2] = -std::sin(radian);
@@ -109,12 +109,22 @@ inline Matrix4x4 MakeRotateZMatrix(float radian) {
 	return result;
 }
 
-inline Matrix4x4 MakeRotateMatrix(Vector3 radian) {
-	
-return Multiply(Multiply(MakeRotateXMatrix(radian.x), MakeRotateYMatrix(radian.y)),MakeRotateZMatrix(radian.z));
+inline Matrix4x4 MakeRotateMatrix(Vector3 radian) { return Multiply(Multiply(MakeRotateXMatrix(radian.x), MakeRotateYMatrix(radian.y)), MakeRotateZMatrix(radian.z)); }
 
+inline Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& translate, const Vector3& rotate) {
+	return Multiply(MakeScaleMatrix(scale), Multiply(MakeRotateMatrix(rotate), MakeTranslateMatrix(translate)));
 }
 
-inline Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& translate,const Vector3& rotate) {
-	return Multiply(MakeScaleMatrix(scale), Multiply(MakeRotateMatrix(rotate) ,MakeTranslateMatrix(translate)));
-}
+inline Vector3 Leap(Vector3 start, Vector3 end, float InterpolationRate) {
+	Vector3 pos;
+	float t=0.0f;
+	t += 0.01f;
+	if (t >= InterpolationRate) {
+		t = InterpolationRate;
+	}
+	pos.x = float((InterpolationRate - t) * start.x + t * end.x);
+	pos.y = float((InterpolationRate - t) * start.y + t * end.y);
+	pos.z = float((InterpolationRate - t) * start.y + t * end.y);
+
+	return pos;
+};

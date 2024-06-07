@@ -45,14 +45,19 @@ void GameScene::Initialize() {
 	Vector3 playerPosition = mapChipFild_->GetMapChipPositionByIndex(2, 18);
 	player_->Initialize(modelPlayer_, textureHandle_, &viewProjection_,playerPosition);
 	
+	//カメラコントローラー
+	cameraController_ = new CameraController();
+	cameraController_->Initialize();
+	cameraController_->SetTarget(player_);
+	cameraController_->Reset();
 	debugCamera_ = new DebugCamera(1280, 720);
 }
 
 void GameScene::Update() {
 
+	cameraController_->Update();
 	player_->Update();
-
-
+	
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock)
@@ -71,6 +76,10 @@ void GameScene::Update() {
 	} else {
 		viewProjection_.UpdateMatrix();
 	}
+	viewProjection_.matView = cameraController_->GetViewProjection().matView;
+	viewProjection_.matProjection = cameraController_->GetViewProjection().matProjection;
+	viewProjection_.TransferMatrix();
+	
 
 	skydome_->Update();
 #ifdef _DEBUG

@@ -16,6 +16,8 @@ public:
 	/// </summary>
 	void Draw();
 
+	WorldTransform& GetWorldTransform() { return worldTransform_; };
+
 private:
 
 	enum class LRDirection { 
