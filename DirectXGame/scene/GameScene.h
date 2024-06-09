@@ -2,6 +2,7 @@
 
 #include "Audio.h"
 #include "DirectXCommon.h"
+#include"CameraController.h"
 #include "Input.h"
 #include "Model.h"
 #include "Sprite.h"
@@ -13,7 +14,7 @@
 #include"Skydome.h"
 #include"MapChipField.h"
 #include "Player.h"
-#include"CameraController.h"
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -75,6 +76,9 @@ private: // メンバ変数
 
 	//カメラコントローラー
 	CameraController* cameraController_ = nullptr;
+
+	Rect movableArea_ = {};
+
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

@@ -17,6 +17,7 @@ public:
 	void Draw();
 
 	WorldTransform& GetWorldTransform() { return worldTransform_; };
+	const Vector3& GetVelocity() const { return velocity_; }
 
 private:
 

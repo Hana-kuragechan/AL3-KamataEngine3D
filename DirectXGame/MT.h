@@ -116,15 +116,11 @@ inline Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& translate
 }
 
 inline Vector3 Leap(Vector3 start, Vector3 end, float InterpolationRate) {
-	Vector3 pos;
-	float t=0.0f;
-	t += 0.01f;
-	if (t >= InterpolationRate) {
-		t = InterpolationRate;
-	}
-	pos.x = float((InterpolationRate - t) * start.x + t * end.x);
-	pos.y = float((InterpolationRate - t) * start.y + t * end.y);
-	pos.z = float((InterpolationRate - t) * start.y + t * end.y);
+	
+	Vector3 result;
+	result.x = float((1.0f - InterpolationRate) * start.x + InterpolationRate * end.x);
+	result.y = float((1.0f - InterpolationRate) * start.y + InterpolationRate * end.y);
+	result.z = float((1.0f - InterpolationRate) * start.z + InterpolationRate * end.z);
 
-	return pos;
+	return result;
 };

@@ -86,7 +86,7 @@ void Player::Update() {
 
 	if (turnTimer_ > 0.0f) {
 		turnTimer_ -= 1 / 60;
-		float destinationRotationYTable[]{std::numbers::pi_v<float> * 2.0f / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
+		float destinationRotationYTable[]{std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
 		float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
 		worldTransform_.rotation_.y = float((1.0 - turnTimer_) * destinationRotationY + turnTimer_ * turnFirstRotationY_);
 	
