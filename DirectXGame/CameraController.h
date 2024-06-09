@@ -19,17 +19,17 @@ public:
 	void Reset();
 	ViewProjection& GetViewProjection() { return viewProjection_; };
 	
-	void SetMovebleArea( Rect area) { movebleArea_ = area; }
+	void SetMovebleArea( Rect area) { movableArea_ = area; }
 
 private:
 	ViewProjection viewProjection_;
 	Player* target_ = nullptr;
 	Vector3 targetOffset_ = {0, 0, -25.0f};
 	Vector3 targetCoordinates_ = {};
-	Rect movebleArea_ = {0, 100, 0, 100};
-
+	Rect movableArea_ = {0, 100, 0, 100};
+	
 	static inline const float kInterpolationRate = 0.5f;
-	static inline const float kVelocityBias = 3.0f;
+	static inline const float kVelocityBias = 5.0f;
 
 	static inline const Rect Margin = {-10, 10, -30, 5};
 };

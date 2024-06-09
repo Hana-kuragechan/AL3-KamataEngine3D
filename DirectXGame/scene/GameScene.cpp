@@ -47,12 +47,12 @@ void GameScene::Initialize() {
 	
 	//カメラコントローラー
 	
-	/*movableArea_ = {17, 200, 9, 50};*/
+	movebleArea_ = {17, 181, 9, 50};
 
 	cameraController_ = new CameraController();
 	cameraController_->Initialize();
 	cameraController_->SetTarget(player_);
-	/*cameraController_->SetMovebleArea(movableArea_);*/
+	cameraController_->SetMovebleArea(movebleArea_);
 	cameraController_->Reset();
 	debugCamera_ = new DebugCamera(1280, 720);
 }

@@ -8,9 +8,7 @@ void CameraController::Initialize() { viewProjection_.Initialize(); }
 void CameraController::Update() {
 
 	const WorldTransform& targetWorldTransform = target_->GetWorldTransform();
-	/*viewProjection_.translation_.x = targetWorldTransform.translation_.x + targetOffset_.x;
-	viewProjection_.translation_.y = targetWorldTransform.translation_.y + targetOffset_.y;
-	viewProjection_.translation_.z = targetWorldTransform.translation_.z + targetOffset_.z;*/
+	
 
 	targetCoordinates_.x = targetWorldTransform.translation_.x + targetOffset_.x + target_->GetVelocity().x * kVelocityBias;
 	targetCoordinates_.y = targetWorldTransform.translation_.y + targetOffset_.y + target_->GetVelocity().y * kVelocityBias;
@@ -19,12 +17,13 @@ void CameraController::Update() {
 
 	viewProjection_.translation_.x = std::max(viewProjection_.translation_.x, target_->GetWorldTransform().translation_.x + Margin.left);
 	viewProjection_.translation_.x = std::min(viewProjection_.translation_.x, target_->GetWorldTransform().translation_.x + Margin.right);
-	viewProjection_.translation_.x = std::max(viewProjection_.translation_.x, target_->GetWorldTransform().translation_.y + Margin.bottom);
-	viewProjection_.translation_.x = std::min(viewProjection_.translation_.x, target_->GetWorldTransform().translation_.y + Margin.top);
+	viewProjection_.translation_.y = std::max(viewProjection_.translation_.y, target_->GetWorldTransform().translation_.y + Margin.bottom);
+	viewProjection_.translation_.y = std::min(viewProjection_.translation_.y, target_->GetWorldTransform().translation_.y + Margin.top);
 
 
-	viewProjection_.translation_.x = std::clamp(viewProjection_.translation_.x, movebleArea_.left, movebleArea_.right);
-	viewProjection_.translation_.y = std::clamp(viewProjection_.translation_.y, movebleArea_.bottom, movebleArea_.top);
+	viewProjection_.translation_.x = std::clamp(viewProjection_.translation_.x, movableArea_.left, movableArea_.right);
+	viewProjection_.translation_.y = std::clamp(viewProjection_.translation_.y, movableArea_.bottom, movableArea_.top);
+
 
 	viewProjection_.UpdateMatrix();
 }

@@ -38,8 +38,9 @@ private:
 	uint32_t textureHandle_ = 0u;
 	ViewProjection* viewProjection_ = nullptr;
 	Vector3 velocity_ = {};
+
 	static inline const float kAcceleration = 0.1f;
 	static inline const float kAttenuation = 0.1f;
-	static inline const float kLimitRunSpeed=0.5f;
+	static inline const float kLimitRunSpeed=0.7f;
 	
 };
