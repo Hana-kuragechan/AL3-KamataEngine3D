@@ -26,6 +26,7 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
+
 	//ブロック
 	blockTextureHandle_ = TextureManager::Load("cube/cube.jpg");
 	block_ = Model::Create();
@@ -37,16 +38,16 @@ void GameScene::Initialize() {
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
+
 	//プレイヤー
 	textureHandle_ = TextureManager::Load("cube/cube.jpg");
-	/*TextureManager::Load("uvChecker.png");*/
 	modelPlayer_ = Model::Create();
 	player_ = new Player();
 	Vector3 playerPosition = mapChipFild_->GetMapChipPositionByIndex(2, 18);
 	player_->Initialize(modelPlayer_, textureHandle_, &viewProjection_,playerPosition);
-	
+	player_->SetMapChipField(mapChipFild_);
+
 	//カメラコントローラー
-	
 	movebleArea_ = {17, 181, 9, 50};
 
 	cameraController_ = new CameraController();

@@ -11,7 +11,11 @@ enum class MapChipType {
 struct MapChipDate {
 	std::vector<std::vector<MapChipType>> date;
 };
+struct IndexSet {
+	uint32_t xIndex;
+	uint32_t yIndex;
 
+};
 class MapChipField {
 
 public:
@@ -22,6 +26,7 @@ public:
 	Vector3 GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex);
 	uint32_t GetNumBlockVirtical() { return kNumBlockVirtical; };
 	uint32_t GetNumBlockHorizontal() { return kNumBlockHorizontal; };
+	IndexSet GetMapChipIndexSetByPosition(const Vector3& position);
 
 private:
 

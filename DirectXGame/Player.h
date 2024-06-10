@@ -1,6 +1,33 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include<numbers>
+
+enum class LRDirection {
+	kRight,
+	kLeft,
+};
+
+// マップとの当たり判定情報
+struct CollisionMapInpo {
+
+	bool ceiling = false; // 天井
+	bool landing = false; // 着地
+	bool nitWall = false; // 壁
+	Vector3 move;
+};
+
+// 角
+enum Corner {
+	kRightBottom, // 右下
+	kLeftBottom,  // 左下
+	kRightTop,    // 右上
+	kLeftTop,     // 左上
+	kNumCorner    // 要素数
+};
+
+
+class MapChipField;
+
 class Player {
 public:
 	/// <summary>
@@ -16,23 +43,19 @@ public:
 	/// </summary>
 	void Draw();
 
+	/*void MovingEntry();*/
+	
 	WorldTransform& GetWorldTransform() { return worldTransform_; };
 	const Vector3& GetVelocity() const { return velocity_; }
+	void SetMapChipField(MapChipField* mapChipField) { mapChipField_=mapChipField; };
 
 private:
 
-	enum class LRDirection { 
-		kRight,
-		kLeft,
-	};
 	LRDirection lrDirection_ = LRDirection::kRight;
 	float turnFirstRotationY_ = 0.0f;
 	float turnTimer_ = 0.0f;
 	static inline const float kTimeTurn = 0.3f;
 	bool onGround_ = true;
-	static inline const float kGravityAcceleration = 0.1f;
-	static inline const float kLimitFallSpeed = 0.3f;
-	static inline const float kJumpAcceleration = 1.0f;
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
 	uint32_t textureHandle_ = 0u;
@@ -42,5 +65,21 @@ private:
 	static inline const float kAcceleration = 0.1f;
 	static inline const float kAttenuation = 0.1f;
 	static inline const float kLimitRunSpeed=0.7f;
+	static inline const float kGravityAcceleration = 0.1f;
+	static inline const float kLimitFallSpeed = 0.3f;
+	static inline const float kJumpAcceleration = 1.0f;
 	
+	//マップチップによるフィールド
+	MapChipField* mapChipField_ = nullptr;
+	//キャラクターの当たり判定サイズ
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
+	
+	void ColisionMap(CollisionMapInpo& inpo);
+	void ColisionMapTop(CollisionMapInpo& inpo);
+	/*void ColisionMapBottom(CollisionMapInpo& inpo);
+	void ColisionMapRight(CollisionMapInpo& inpo);
+	void ColisionMapLeft(CollisionMapInpo& inpo);*/
+	
+	Vector3 CornerPosition(const Vector3& center, Corner corner);
 };
