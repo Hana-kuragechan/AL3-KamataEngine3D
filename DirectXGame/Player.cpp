@@ -1,6 +1,6 @@
 #define NOMINMAX
 #include "Player.h"
-#include"MapChipField.h"
+#include "MapChipField.h"
 #include <Input.h>
 #include <algorithm>
 #include <cassert>
@@ -102,7 +102,7 @@ void Player::Update() {
 			onGround_ = true;
 		}
 	}
-	CollisionMapInpo inpo;
+	CollisionMapInfo inpo;
 	inpo.move = velocity_;
 	ColisionMap(inpo);
 
@@ -130,7 +130,20 @@ void Player::Update() {
 
 void Player::Draw() { model_->Draw(worldTransform_, *viewProjection_, textureHandle_); }
 
-void Player::ColisionMap(CollisionMapInpo& info) {
+void Player::MoveResult(CollisionMapInfo& info) {
+
+	worldTransform_.translation_.x += info.move.x;
+	worldTransform_.translation_.y += info.move.y;
+	worldTransform_.translation_.z += info.move.z;
+}
+
+void Player::CeilingCollision(const CollisionMapInfo& info) {
+	if (info.ceiling) {
+		velocity_.y = 0;
+	}
+}
+
+void Player::ColisionMap(CollisionMapInfo& info) {
 
 	ColisionMapTop(info);
 	/*ColisionMapBottom(info);
@@ -138,13 +151,13 @@ void Player::ColisionMap(CollisionMapInpo& info) {
 	ColisionMapRight(info);*/
 }
 
-void Player::ColisionMapTop(CollisionMapInpo& info) {
-	//上昇していなければ早期リターン
-	if (info.move.y<=0) {
+void Player::ColisionMapTop(CollisionMapInfo& info) {
+	// 上昇していなければ早期リターン
+	if (info.move.y <= 0) {
 		return;
 	}
-	//移動後の4つの角の座標
-	std::array<Vector3, kNumCorner> positionNew; 
+	// 移動後の4つの角の座標
+	std::array<Vector3, kNumCorner> positionNew;
 	for (uint32_t i = 0; i < positionNew.size(); ++i) {
 
 		Vector3 result;
@@ -154,7 +167,9 @@ void Player::ColisionMapTop(CollisionMapInpo& info) {
 
 		positionNew[i] = CornerPosition(result, static_cast<Corner>(i));
 	}
+
 	MapChipType type;
+	// 真上の当たり判定を行う
 	bool hit = false;
 	IndexSet indexSet;
 	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[int(Corner::kLeftTop)]);
@@ -167,21 +182,28 @@ void Player::ColisionMapTop(CollisionMapInpo& info) {
 	if (type == MapChipType::kBlock) {
 		hit = true;
 	}
+
+	// ブロックにヒット？
+	if (hit) {
+		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kRightTop]);
+		Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
+		info.move.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - kHeight / 2 - kBlank);
+		info.ceiling = true;
+	}
 }
 
-//void Player::ColisionMapBottom(CollisionMapInpo& info) {}
+// void Player::ColisionMapBottom(CollisionMapInpo& info) {}
 //
-//void Player::ColisionMapRight(CollisionMapInpo& info) {}
+// void Player::ColisionMapRight(CollisionMapInpo& info) {}
 //
-//void Player::ColisionMapLeft(CollisionMapInpo& inpo) {}
-
+// void Player::ColisionMapLeft(CollisionMapInpo& inpo) {}
 
 Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 	Vector3 offsetTable[kNumCorner] = {
-	    {+kWidth / 2.0f, -kHeight / 2.0f, 0},//kRightBottom
-	    {-kWidth / 2.0f, -kHeight / 2.0f, 0},//kLeftBotttom
-	    {+kWidth / 2.0f, +kHeight / 2.0f, 0},//kRightTop
-	    {-kWidth / 2.0f, +kHeight / 2.0f, 0},//kLeftTop
+	    {+kWidth / 2.0f, -kHeight / 2.0f, 0}, //  kRightBottom
+	    {-kWidth / 2.0f, -kHeight / 2.0f, 0}, //  kLeftBotttom
+	    {+kWidth / 2.0f, +kHeight / 2.0f, 0}, //  kRightTop
+	    {-kWidth / 2.0f, +kHeight / 2.0f, 0}, //  kLeftTop
 	};
 
 	Vector3 result;
