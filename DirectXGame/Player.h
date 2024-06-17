@@ -10,8 +10,8 @@ enum class LRDirection {
 // マップとの当たり判定情報
 struct CollisionMapInfo {
 
-	bool ceiling = false; // 天井
-	bool landing = false; // 着地
+	bool hitCeiling = false; // 天井
+	bool hitLanding = false; // 着地
 	bool hitWall = false; // 壁
 	Vector3 move;
 };
@@ -50,6 +50,7 @@ public:
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_=mapChipField; };
 	void MoveResult(CollisionMapInfo& info); 
 	void CeilingCollision(const CollisionMapInfo& info);
+	void SwitchingOnGround(const CollisionMapInfo& info);
 
 private :
 
@@ -66,22 +67,24 @@ private :
 
 	static inline const float kAcceleration = 0.1f;
 	static inline const float kAttenuation = 0.1f;
-	static inline const float kLimitRunSpeed=0.7f;
+	static inline const float kLimitRunSpeed=0.5f;
 	static inline const float kGravityAcceleration = 0.1f;
-	static inline const float kLimitFallSpeed = 0.3f;
-	static inline const float kJumpAcceleration = 1.0f;
+	static inline const float kLimitFallSpeed = 0.7f;
+	static inline const float kJumpAcceleration = 1.1f;
 	static inline const float kBlank = 0.1f;
+	static inline const float kAttenuationLanding = 0.1f;
+	static inline const float kAdjustLanding = 0.2f;
 	//マップチップによるフィールド
 	MapChipField* mapChipField_ = nullptr;
 	//キャラクターの当たり判定サイズ
 	static inline const float kWidth = 1.8f;
 	static inline const float kHeight = 1.8f;
 	
-	void ColisionMap(CollisionMapInfo& inpo);
-	void ColisionMapTop(CollisionMapInfo& inpo);
-	/*void ColisionMapBottom(CollisionMapInpo& inpo);
-	void ColisionMapRight(CollisionMapInpo& inpo);
-	void ColisionMapLeft(CollisionMapInpo& inpo);*/
+	void ColisionMap(CollisionMapInfo& info);
+	void ColisionMapTop(CollisionMapInfo& info);
+	void ColisionMapBottom(CollisionMapInfo& info);
+	/*void ColisionMapRight(CollisionMapInfo& info);
+	void ColisionMapLeft(CollisionMapInpo& info);*/
 	
 	Vector3 CornerPosition(const Vector3& center, Corner corner);
 };
