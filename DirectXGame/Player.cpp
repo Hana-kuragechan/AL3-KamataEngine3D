@@ -102,9 +102,10 @@ void Player::Update() {
 			onGround_ = true;
 		}
 	}
-	CollisionMapInfo inpo;
-	inpo.move = velocity_;
-	ColisionMap(inpo);
+	CollisionMapInfo info;
+	info.move = velocity_;
+	ColisionMap(info);
+	velocity_ = info.move;
 
 	worldTransform_.translation_.x += velocity_.x;
 	worldTransform_.translation_.y += velocity_.y;
