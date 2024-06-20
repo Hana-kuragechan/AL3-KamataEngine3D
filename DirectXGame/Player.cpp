@@ -103,10 +103,10 @@ void Player::Update() {
 		}
 	}
 
-
 	CollisionMapInfo info;
 	info.move = velocity_;
 	ColisionMap(info);
+	SwitchingOnGround(info);
 	velocity_ = info.move;
 
 	worldTransform_.translation_.x += velocity_.x;
@@ -143,12 +143,49 @@ void Player::CeilingCollision(const CollisionMapInfo& info) {
 	}
 }
 
-void Player::SwitchingOnGround(const CollisionMapInfo& info) { 
+void Player::SwitchingOnGround(const CollisionMapInfo& info) {
 	if (onGround_) {
+		// ジャンプ開始
+		if (velocity_.y > 0.0f) {
+			onGround_ = false;
+		} else {
 
+			// 移動後の4つの角の座標
+			std::array<Vector3, Corner::kNumCorner> positionNew;
 
-	} 
-	else {
+			for (uint32_t i = 0; i < positionNew.size(); ++i) {
+				positionNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+			}
+
+			MapChipType mapChipType;
+
+			// 真下の当たり判定を行う
+			bool hit = false;
+			// 左下点の判定
+			IndexSet indexSet;
+
+			indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom] + Vector3(0, -kAdjustLanding, 0));
+			mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+
+			if (mapChipType == MapChipType::kBlock) {
+				hit = true;
+			}
+
+			// 右下点の判定
+			indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kRightBottom] + Vector3(0, -kAdjustLanding, 0));
+			mapChipType = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+
+			if (mapChipType == MapChipType::kBlock) {
+				hit = true;
+			}
+
+			// ブロックにヒット？
+			if (!hit) {
+				// 空中状態に切り替える
+				onGround_ = false;
+			}
+		}
+	} else {
 		if (info.hitLanding) {
 			onGround_ = true;
 			velocity_.x *= (1.0f - kAttenuationLanding);
@@ -245,7 +282,7 @@ void Player::ColisionMapBottom(CollisionMapInfo& info) {
 	if (hit) {
 		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kRightBottom]);
 		Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
-		info.move.y = std::min(0.0f, velocity_.y + (rect.top - worldTransform_.translation_.y) + kBlank);
+		info.move.y = std::min(0.0f, (rect.top - worldTransform_.translation_.y) + kHeight / 2 + kBlank);
 		info.hitLanding = true;
 	}
 }
