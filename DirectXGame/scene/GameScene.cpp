@@ -17,6 +17,7 @@ GameScene::~GameScene() {
 	delete modelSkydome_;
 	delete mapChipFild_;
 	delete player_;
+	delete enemy_;
 }
 
 void GameScene::Initialize() {
@@ -40,12 +41,20 @@ void GameScene::Initialize() {
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
 
 	//プレイヤー
-	textureHandle_ = TextureManager::Load("cube/cube.jpg");
+	playerTextureHandle_ = TextureManager::Load("cube/cube.jpg");
 	modelPlayer_ = Model::Create();
 	player_ = new Player();
 	Vector3 playerPosition = mapChipFild_->GetMapChipPositionByIndex(2, 18);
-	player_->Initialize(modelPlayer_, textureHandle_, &viewProjection_,playerPosition);
+	player_->Initialize(modelPlayer_, playerTextureHandle_, &viewProjection_,playerPosition);
 	player_->SetMapChipField(mapChipFild_);
+
+	//敵
+	enemyTextureHandle_ = TextureManager::Load("sample.png");/*Resources/sample.png*/
+	modelEnemy_ = Model::Create();
+	enemy_ = new Enemy();
+	Vector3 enemyPosition = mapChipFild_->GetMapChipPositionByIndex(6, 18);
+	enemy_->Initialize(modelEnemy_, enemyTextureHandle_, &viewProjection_, enemyPosition);
+
 
 	//カメラコントローラー
 	movebleArea_ = {17, 181, 9, 50};
@@ -62,7 +71,9 @@ void GameScene::Update() {
 
 	cameraController_->Update();
 	player_->Update();
-	
+	enemy_->Update();
+
+
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock)
@@ -72,6 +83,7 @@ void GameScene::Update() {
 			worldTransformBlock->TransferMatrix();
 		}
 	}
+
 
 	debugCamera_->Update();
 	if (isDebugCameraActive_) {
@@ -121,6 +133,7 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	player_->Draw();
+	enemy_->Draw();
 	skydome_->Draw();
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
