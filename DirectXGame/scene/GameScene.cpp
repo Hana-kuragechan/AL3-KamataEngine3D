@@ -52,7 +52,7 @@ void GameScene::Initialize() {
 	enemyTextureHandle_ = TextureManager::Load("sample.png");/*Resources/sample.png*/
 	modelEnemy_ = Model::Create();
 	enemy_ = new Enemy();
-	Vector3 enemyPosition = mapChipFild_->GetMapChipPositionByIndex(6, 18);
+	Vector3 enemyPosition = mapChipFild_->GetMapChipPositionByIndex(10, 18);
 	enemy_->Initialize(modelEnemy_, enemyTextureHandle_, &viewProjection_, enemyPosition);
 
 
