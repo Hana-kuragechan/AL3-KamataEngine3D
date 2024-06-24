@@ -43,15 +43,14 @@ public:
 	/// </summary>
 	void Draw();
 
-	/*void MovingEntry();*/
-	
 	WorldTransform& GetWorldTransform() { return worldTransform_; };
 	const Vector3& GetVelocity() const { return velocity_; }
 	void SetMapChipField(MapChipField* mapChipField) { mapChipField_=mapChipField; };
 	void MoveResult(CollisionMapInfo& info); 
 	void CeilingCollision(const CollisionMapInfo& info);
+	void WallCollision(const CollisionMapInfo& info);
 	void SwitchingOnGround(const CollisionMapInfo& info);
-
+	
 private :
 
 	LRDirection lrDirection_ = LRDirection::kRight;
@@ -75,6 +74,7 @@ private :
 
 	static inline const float kAttenuationLanding = 0.1f;
 	static inline const float kAdjustLanding = 0.2f;
+	static inline const float kAttenuationWall = 0.1f;
 	//マップチップによるフィールド
 	MapChipField* mapChipField_ = nullptr;
 	//キャラクターの当たり判定サイズ
@@ -84,8 +84,8 @@ private :
 	void ColisionMap(CollisionMapInfo& info);
 	void ColisionMapTop(CollisionMapInfo& info);
 	void ColisionMapBottom(CollisionMapInfo& info);
-	/*void ColisionMapRight(CollisionMapInfo& info);
-	void ColisionMapLeft(CollisionMapInpo& info);*/
+	void ColisionMapRight(CollisionMapInfo& info);
+	void ColisionMapLeft(CollisionMapInfo& info);
 	
 	Vector3 CornerPosition(const Vector3& center, Corner corner);
 };

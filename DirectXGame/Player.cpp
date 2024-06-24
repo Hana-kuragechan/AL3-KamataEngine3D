@@ -142,6 +142,11 @@ void Player::CeilingCollision(const CollisionMapInfo& info) {
 		velocity_.y = 0;
 	}
 }
+void Player::WallCollision(const CollisionMapInfo& info) {
+	if (info.hitWall) {
+		velocity_.x *= (1.0f - kAttenuationWall);
+	}
+}
 
 void Player::SwitchingOnGround(const CollisionMapInfo& info) {
 	if (onGround_) {
@@ -198,8 +203,8 @@ void Player::ColisionMap(CollisionMapInfo& info) {
 
 	ColisionMapTop(info);
 	ColisionMapBottom(info);
-	/*ColisionMapLeft(info);
-	ColisionMapRight(info);*/
+	ColisionMapLeft(info);
+	ColisionMapRight(info);
 }
 
 // 上の当たり判定
@@ -243,6 +248,7 @@ void Player::ColisionMapTop(CollisionMapInfo& info) {
 		info.move.y = std::max(0.0f, rect.bottom - worldTransform_.translation_.y - kHeight / 2 - kBlank);
 		info.hitCeiling = true;
 	}
+
 }
 
 // 下の当たり判定
@@ -287,9 +293,89 @@ void Player::ColisionMapBottom(CollisionMapInfo& info) {
 	}
 }
 //
-// void Player::ColisionMapRight(CollisionMapInpo& info) {}
-//
-// void Player::ColisionMapLeft(CollisionMapInpo& inpo) {}
+// 右の当たり判定(壁)
+void Player::ColisionMapRight(CollisionMapInfo& info) {
+
+	if (info.move.x <= 0) {
+		return;
+	}
+	// 移動後の4つの角の座標
+	std::array<Vector3, kNumCorner> positionNew;
+	for (uint32_t i = 0; i < positionNew.size(); ++i) {
+
+		Vector3 result;
+		result.x = worldTransform_.translation_.x + info.move.x;
+		result.y = worldTransform_.translation_.y + info.move.y;
+		result.z = worldTransform_.translation_.z + info.move.z;
+
+		positionNew[i] = CornerPosition(result, static_cast<Corner>(i));
+	}
+	MapChipType type;
+	// 右方向の当たり判定を行う
+	bool hit = false;
+	IndexSet indexSet;
+	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[int(Corner::kRightTop)]);
+	type = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	if (type == MapChipType::kBlock) {
+		hit = true;
+	}
+	indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[int(Corner::kRightBottom)]);
+	type = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+
+	if (type == MapChipType::kBlock) {
+		hit = true;
+	}
+
+	// ブロックにヒット？
+	if (hit) {
+		indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kRightTop]);
+		Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
+		info.move.x = std::max(0.0f, rect.left - worldTransform_.translation_.x - kWidth / 2 - kBlank);
+		info.hitWall = true;
+	}
+}
+//左の当たり判定(壁	)
+ void Player::ColisionMapLeft(CollisionMapInfo& info) {
+ 
+ if (info.move.x >= 0) {
+		 return;
+	 }
+	 // 移動後の4つの角の座標
+	 std::array<Vector3, kNumCorner> positionNew;
+	 for (uint32_t i = 0; i < positionNew.size(); ++i) {
+
+		 Vector3 result;
+		 result.x = worldTransform_.translation_.x + info.move.x;
+		 result.y = worldTransform_.translation_.y + info.move.y;
+		 result.z = worldTransform_.translation_.z + info.move.z;
+
+		 positionNew[i] = CornerPosition(result, static_cast<Corner>(i));
+	 }
+	 MapChipType type;
+	 // 右方向の当たり判定を行う
+	 bool hit = false;
+	 IndexSet indexSet;
+	 indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[int(Corner::kLeftTop)]);
+	 type = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	 if (type == MapChipType::kBlock) {
+		 hit = true;
+	 }
+	 indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[int(Corner::kLeftBottom)]);
+	 type = mapChipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+
+	 if (type == MapChipType::kBlock) {
+		 hit = true;
+	 }
+
+	 // ブロックにヒット？
+	 if (hit) {
+		 indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[kRightTop]);
+		 Rect rect = mapChipField_->GetRectByIndex(indexSet.xIndex, indexSet.yIndex);
+		 info.move.x = std::min(0.0f, rect.left - worldTransform_.translation_.x + kWidth / 2 + kBlank);
+		 info.hitWall = true;
+	 }
+ 
+ }
 
 Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 	Vector3 offsetTable[kNumCorner] = {
