@@ -352,7 +352,7 @@ void Player::ColisionMapRight(CollisionMapInfo& info) {
 		 positionNew[i] = CornerPosition(result, static_cast<Corner>(i));
 	 }
 	 MapChipType type;
-	 // 右方向の当たり判定を行う
+	 // 左方向の当たり判定を行う
 	 bool hit = false;
 	 IndexSet indexSet;
 	 indexSet = mapChipField_->GetMapChipIndexSetByPosition(positionNew[int(Corner::kLeftTop)]);

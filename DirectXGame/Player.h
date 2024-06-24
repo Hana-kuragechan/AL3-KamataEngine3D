@@ -72,8 +72,10 @@ private :
 	static inline const float kJumpAcceleration = 1.1f;
 	static inline const float kBlank = 0.1f;
 
+	//着地時の速度減衰率
 	static inline const float kAttenuationLanding = 0.1f;
 	static inline const float kAdjustLanding = 0.2f;
+	//着地時の速度減衰率
 	static inline const float kAttenuationWall = 0.1f;
 	//マップチップによるフィールド
 	MapChipField* mapChipField_ = nullptr;
