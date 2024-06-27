@@ -1,7 +1,7 @@
 #pragma once
 #include "Model.h"
 #include "WorldTransform.h"
-#include<numbers>
+#include <numbers>
 class Enemy {
 public:
 	/// <summary>
@@ -22,9 +22,9 @@ private:
 	Model* model_ = nullptr;
 	uint32_t textureHandle_ = 0u;
 	ViewProjection* viewProjection_ = nullptr;
-	static inline const float kWalkSpeed_ =0.1f;
-	static inline const float kWalkMotionAngleStart_ =0.1f;
-	static inline const float kWalkMotionAngleEnd_ = 0.5f;
+	static inline const float kWalkSpeed_ = 0.08f;
+	static inline const float kWalkMotionAngleStart_ = -40.0f;
+	static inline const float kWalkMotionAngleEnd_ = 40.0f;
 	static inline const float kWalkMotionTime_ = 1.0f;
 	float walkTimer_ = 0.0f;
 	Vector3 velocity_ = {};

@@ -64,7 +64,10 @@ void Player::Update() {
 
 		if (Input::GetInstance()->PushKey(DIK_UP)) {
 			// ジャンプ初速
-			velocity_ = Vector3Add(velocity_, Vector3(0, kJumpAcceleration, 0));
+			velocity_.x += 0;
+			velocity_.y = kAcceleration;
+			velocity_.z += 0;
+			
 		}
 
 	} else {

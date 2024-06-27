@@ -15,11 +15,13 @@ void Enemy::Initialize(Model* model, uint32_t textureHandle, ViewProjection* vie
 
 void Enemy::Update() { 
 	worldTransform_.TransferMatrix(); 
+	//移動
+	worldTransform_.translation_ = worldTransform_.translation_ + velocity_;
+	//上下に動かす
 	walkTimer_ += 1.0f / 60.0f;
 	float param = std::sin((2 * 3.14f) * walkTimer_ / kWalkMotionTime_);
 	float radian = kWalkMotionAngleStart_ + kWalkMotionAngleEnd_ * (param + 1.0f) / 2.0f;
-	worldTransform_.translation_.x=
-	worldTransform_.translation_ += velocity_;
+	worldTransform_.rotation_.x = radian * 3.14f / 360.0f;
 	// 行列計算
 	worldTransform_.UpdateMatrix();
 }

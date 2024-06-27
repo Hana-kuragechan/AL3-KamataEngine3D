@@ -64,7 +64,7 @@ private :
 	ViewProjection* viewProjection_ = nullptr;
 	Vector3 velocity_ = {};
 
-	static inline const float kAcceleration = 0.1f;
+	static inline const float kAcceleration = 1.0f;
 	static inline const float kAttenuation = 0.1f;
 	static inline const float kLimitRunSpeed=0.3f;
 	static inline const float kGravityAcceleration = 0.1f;
