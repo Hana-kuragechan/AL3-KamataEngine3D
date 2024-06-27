@@ -7,7 +7,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection, const Vector3& position);
+	void Initialize(Model* model,  ViewProjection* viewProjection, const Vector3& position);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -20,7 +20,6 @@ public:
 private:
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
-	uint32_t textureHandle_ = 0u;
 	ViewProjection* viewProjection_ = nullptr;
 	static inline const float kWalkSpeed_ = 0.08f;
 	static inline const float kWalkMotionAngleStart_ = -40.0f;

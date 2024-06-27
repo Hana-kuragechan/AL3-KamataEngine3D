@@ -1,9 +1,10 @@
 #include "Enemy.h"
 
-void Enemy::Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection, const Vector3& position) {
+
+void Enemy::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) 
+{
 	assert(model);
 	model_ = model;
-	textureHandle_ = textureHandle;
 	viewProjection_ = viewProjection;
 
 	worldTransform_.Initialize();
@@ -26,4 +27,4 @@ void Enemy::Update() {
 	worldTransform_.UpdateMatrix();
 }
 
-void Enemy::Draw() { model_->Draw(worldTransform_, *viewProjection_, textureHandle_); }
+void Enemy::Draw() { model_->Draw(worldTransform_, *viewProjection_); }

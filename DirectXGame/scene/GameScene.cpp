@@ -41,19 +41,18 @@ void GameScene::Initialize() {
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
 
 	//プレイヤー
-	playerTextureHandle_ = TextureManager::Load("cube/cube.jpg");
-	modelPlayer_ = Model::Create();
+	modelPlayer_ = Model::CreateFromOBJ("AL3_player", true);
 	player_ = new Player();
 	Vector3 playerPosition = mapChipFild_->GetMapChipPositionByIndex(2, 18);
-	player_->Initialize(modelPlayer_, playerTextureHandle_, &viewProjection_,playerPosition);
+	player_->Initialize(modelPlayer_, &viewProjection_,playerPosition);
 	player_->SetMapChipField(mapChipFild_);
 
 	//敵
-	enemyTextureHandle_ = TextureManager::Load("sample.png");/*Resources/sample.png*/
-	modelEnemy_ = Model::Create();
+	
+	modelEnemy_ = Model::CreateFromOBJ("AL3_enemy", true);
 	enemy_ = new Enemy();
 	Vector3 enemyPosition = mapChipFild_->GetMapChipPositionByIndex(10, 18);
-	enemy_->Initialize(modelEnemy_, enemyTextureHandle_, &viewProjection_, enemyPosition);
+	enemy_->Initialize(modelEnemy_,  &viewProjection_, enemyPosition);
 
 
 	//カメラコントローラー

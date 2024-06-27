@@ -33,7 +33,7 @@ public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
-	void Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection,const Vector3&position);
+	void Initialize(Model* model,  ViewProjection* viewProjection,const Vector3&position);
 	/// <summary>
 	/// 更新
 	/// </summary>
@@ -60,7 +60,6 @@ private :
 	bool onGround_ = true;
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
-	uint32_t textureHandle_ = 0u;
 	ViewProjection* viewProjection_ = nullptr;
 	Vector3 velocity_ = {};
 

@@ -5,10 +5,9 @@
 #include <algorithm>
 #include <cassert>
 
-void Player::Initialize(Model* model, uint32_t textureHandle, ViewProjection* viewProjection, const Vector3& position) {
+void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) {
 	assert(model);
 	model_ = model;
-	textureHandle_ = textureHandle;
 	viewProjection_ = viewProjection;
 
 	worldTransform_.Initialize();
@@ -118,7 +117,7 @@ void Player::Update() {
 
 	// 旋回制御
 	if (turnTimer_ > 0.0f) {
-		turnTimer_ -= 1 / 60;
+		turnTimer_ -= 3.0f / 60.0f;
 		// 左右の自キャラ角度テーブル
 		float destinationRotationYTable[]{std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
 		// 状況に応じた角度を取得
@@ -131,7 +130,7 @@ void Player::Update() {
 	worldTransform_.UpdateMatrix();
 }
 
-void Player::Draw() { model_->Draw(worldTransform_, *viewProjection_, textureHandle_); }
+void Player::Draw() { model_->Draw(worldTransform_, *viewProjection_); }
 
 void Player::MoveResult(CollisionMapInfo& info) {
 
