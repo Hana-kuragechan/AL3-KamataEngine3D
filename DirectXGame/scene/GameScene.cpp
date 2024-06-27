@@ -48,7 +48,6 @@ void GameScene::Initialize() {
 	player_->SetMapChipField(mapChipFild_);
 
 	//敵
-	
 	modelEnemy_ = Model::CreateFromOBJ("AL3_enemy", true);
 	enemy_ = new Enemy();
 	Vector3 enemyPosition = mapChipFild_->GetMapChipPositionByIndex(10, 18);
