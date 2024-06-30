@@ -50,6 +50,9 @@ public: // メンバ関数
 	void GenerateBlocks();
 	std::vector<std::vector<WorldTransform*>>worldTransformBlocks_;
 
+	void CheckAllCollisions();
+
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -73,12 +76,12 @@ private: // メンバ変数
 	//プレイヤー
 	Player* player_ = nullptr;
 	Model* modelPlayer_ = nullptr;
-	uint32_t playerTextureHandle_ = 0;
+	
 
 	//敵
 	Enemy* enemy_ = nullptr;
 	Model* modelEnemy_ = nullptr;
-	uint32_t enemyTextureHandle_ = 0;
+	std::list<Enemy*>enemies_;
 	//カメラコントローラー
 	CameraController* cameraController_ = nullptr;
 

@@ -27,6 +27,7 @@ enum Corner {
 
 
 class MapChipField;
+class Enemy;
 
 class Player {
 public:
@@ -50,8 +51,11 @@ public:
 	void CeilingCollision(const CollisionMapInfo& info);
 	void WallCollision(const CollisionMapInfo& info);
 	void SwitchingOnGround(const CollisionMapInfo& info);
-	
-private :
+	Vector3 GetWorldPosition();
+	AABB GetAABB();
+	void OnCollosion(const Enemy*enemy);
+
+private:
 
 	LRDirection lrDirection_ = LRDirection::kRight;
 	float turnFirstRotationY_ = 0.0f;

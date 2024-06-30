@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "WorldTransform.h"
 #include <numbers>
+class Player;
 class Enemy {
 public:
 	/// <summary>
@@ -16,6 +17,9 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
+	Vector3 GetWorldPosition();
+	AABB GetAABB();
+	void OnCollosion(const Player* player);
 
 private:
 	WorldTransform worldTransform_;
@@ -27,4 +31,7 @@ private:
 	static inline const float kWalkMotionTime_ = 1.0f;
 	float walkTimer_ = 0.0f;
 	Vector3 velocity_ = {};
+	// キャラクターの当たり判定サイズ
+	static inline const float kWidth = 1.8f;
+	static inline const float kHeight = 1.8f;
 };

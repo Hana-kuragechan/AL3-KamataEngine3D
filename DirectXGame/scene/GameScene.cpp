@@ -11,6 +11,10 @@ GameScene::~GameScene() {
 			delete worldTransformBlock;
 		}
 	}
+	for (Enemy* enemy : enemies_) {
+		delete enemy;
+	}
+
 	worldTransformBlocks_.clear();
 	delete debugCamera_;
 	delete skydome_;
@@ -49,10 +53,13 @@ void GameScene::Initialize() {
 
 	//敵
 	modelEnemy_ = Model::CreateFromOBJ("AL3_enemy", true);
-	enemy_ = new Enemy();
-	Vector3 enemyPosition = mapChipFild_->GetMapChipPositionByIndex(10, 18);
-	enemy_->Initialize(modelEnemy_,  &viewProjection_, enemyPosition);
-
+	for (int32_t i= 0; i < 3; ++i) {
+		Enemy* newEnemy = new Enemy();
+		Vector3 enemyPosition = mapChipFild_->GetMapChipPositionByIndex(10 + i * 4, 18-i);
+		newEnemy->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
+		enemies_.push_back(newEnemy);
+	}
+	
 
 	//カメラコントローラー
 	movebleArea_ = {17, 181, 9, 50};
@@ -69,7 +76,11 @@ void GameScene::Update() {
 
 	cameraController_->Update();
 	player_->Update();
-	enemy_->Update();
+
+	
+	for (Enemy* enemy : enemies_) {
+		enemy->Update();
+	}
 
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -82,7 +93,7 @@ void GameScene::Update() {
 		}
 	}
 
-
+	CheckAllCollisions();
 	debugCamera_->Update();
 	if (isDebugCameraActive_) {
 		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
@@ -131,7 +142,12 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	player_->Draw();
-	enemy_->Draw();
+
+	for (Enemy* enemy : enemies_) {
+		enemy->Draw();
+	}
+
+	
 	skydome_->Draw();
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -182,4 +198,20 @@ void GameScene::GenerateBlocks() {
 			}
 		}
 	}
+}
+
+void GameScene::CheckAllCollisions() {
+	#pragma region
+
+	AABB aabb1, aabb2;
+	aabb1 = player_->GetAABB();
+	for (Enemy* enemy : enemies_) {
+		aabb2 = enemy->GetAABB();
+		if (IsCollision(aabb1, aabb2)) {
+			player_->OnCollosion(enemy);
+			enemy->OnCollosion(player_);
+		}
+	}
+	#pragma endregion
+
 }

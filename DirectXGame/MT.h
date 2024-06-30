@@ -13,6 +13,11 @@
 //	float z;
 // };
 
+struct AABB {
+	Vector3 min;
+	Vector3 max;
+};
+
 inline Vector3 Vector3Add(const Vector3 v1, const Vector3 v2) {
 	Vector3 result;
 
@@ -22,6 +27,7 @@ inline Vector3 Vector3Add(const Vector3 v1, const Vector3 v2) {
 
 	return result;
 }
+
 
 inline Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	Matrix4x4 result;
@@ -124,3 +130,13 @@ inline Vector3 Leap(Vector3 start, Vector3 end, float InterpolationRate) {
 
 	return result;
 };
+
+inline bool IsCollision(const AABB& aabb1, const AABB& aabb2) {
+
+	if ((aabb1.min.x<=aabb2.max.x&&aabb1.max.x>=aabb2.min.x)&& 
+		(aabb1.min.y<=aabb2.max.y&&aabb1.max.y>=aabb2.min.y)&& 
+		(aabb1.min.z <= aabb2.max.z && aabb1.max.z >= aabb2.min.z)) {
+		return true;
+	}
+	return false;
+}
