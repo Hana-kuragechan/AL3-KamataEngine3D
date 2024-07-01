@@ -15,7 +15,7 @@
 #include"MapChipField.h"
 #include "Player.h"
 #include"Enemy.h"
-
+#include"DeathParticles.h"
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -84,9 +84,11 @@ private: // メンバ変数
 	std::list<Enemy*>enemies_;
 	//カメラコントローラー
 	CameraController* cameraController_ = nullptr;
-
 	CameraController::Rect movebleArea_ = {};
 
+	//死亡時パーティクル
+	DeathParticles* deathParticles_ = nullptr;
+	Model* modelDeathParticles_ = nullptr;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
