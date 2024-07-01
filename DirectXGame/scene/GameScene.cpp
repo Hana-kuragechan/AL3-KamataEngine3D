@@ -61,7 +61,7 @@ void GameScene::Initialize() {
 	}
 	
 	//パーティクル
-	modelDeathParticles_ = Model::CreateFromOBJ("cube", true);
+	modelDeathParticles_ = Model::CreateFromOBJ("particle", true);
 	deathParticles_ = new DeathParticles;
 	deathParticles_->Initialize(modelDeathParticles_, &viewProjection_, playerPosition);
 
