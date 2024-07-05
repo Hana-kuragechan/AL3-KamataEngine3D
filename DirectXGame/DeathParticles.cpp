@@ -34,9 +34,6 @@ void DeathParticles::Update() {
 	}
 	
 	color_.w = std::clamp(1.0f - counter_, 0.0f, 1.0f);
-
-	/*color_.w -= 0.01f;
-	color_.w = std::clamp(color_.w, 0.0f, 1.0f);*/
 	objectColor_.SetColor(color_);
 	objectColor_.TransferMatrix();
 
