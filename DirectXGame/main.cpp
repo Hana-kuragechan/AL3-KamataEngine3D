@@ -5,6 +5,7 @@
 #include "ImGuiManager.h"
 #include "PrimitiveDrawer.h"
 #include "TextureManager.h"
+#include"TitleScene.h"
 #include "WinApp.h"
 
 // Windowsアプリでのエントリーポイント(main関数)
@@ -17,7 +18,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	AxisIndicator* axisIndicator = nullptr;
 	PrimitiveDrawer* primitiveDrawer = nullptr;
 	GameScene* gameScene = nullptr;
-
+	TitleScene* titleScene = nullptr;
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
 	win->CreateGameWindow(L"GC2B_10_タムラ_ハナコ_AL3");
