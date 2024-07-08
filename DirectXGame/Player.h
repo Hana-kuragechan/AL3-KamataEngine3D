@@ -54,6 +54,8 @@ public:
 	Vector3 GetWorldPosition();
 	AABB GetAABB();
 	void OnCollosion(const Enemy*enemy);
+	// デスフラグのgetter
+	bool IsDead() const { return isDead_; }
 
 private:
 
@@ -93,4 +95,7 @@ private:
 	void ColisionMapLeft(CollisionMapInfo& info);
 	
 	Vector3 CornerPosition(const Vector3& center, Corner corner);
+
+	// 死亡フラグ
+	bool isDead_ = false;
 };

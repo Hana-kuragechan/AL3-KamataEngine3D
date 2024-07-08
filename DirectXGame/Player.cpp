@@ -202,7 +202,7 @@ void Player::SwitchingOnGround(const CollisionMapInfo& info) {
 }
 
 Vector3 Player::GetWorldPosition() { 
-	Vector3 worldPos;
+	Vector3 worldPos{};
 	worldPos.x = worldTransform_.matWorld_.m[3][0];
 	worldPos.y = worldTransform_.matWorld_.m[3][1];
 	worldPos.z = worldTransform_.matWorld_.m[3][2];
@@ -213,7 +213,7 @@ Vector3 Player::GetWorldPosition() {
 
 AABB Player::GetAABB() { 
 	Vector3 worldPos = GetWorldPosition();
-	AABB aabb;
+	AABB aabb{};
 
 	aabb.min = {worldPos.x - kWidth / 2.0f, worldPos.y - kHeight / 2.0f, worldPos.z - kWidth / 2.0f};
 	aabb.max = {worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f};
@@ -223,7 +223,8 @@ AABB Player::GetAABB() {
 
 void Player::OnCollosion(const Enemy* enemy) { 
 	(void)enemy;
-	velocity_ += Vector3(0,1,0);
+	isDead_ = true;
+	//velocity_ += Vector3(0,1,0);
 }
 
 void Player::ColisionMap(CollisionMapInfo& info) {
@@ -244,7 +245,7 @@ void Player::ColisionMapTop(CollisionMapInfo& info) {
 	std::array<Vector3, kNumCorner> positionNew;
 	for (uint32_t i = 0; i < positionNew.size(); ++i) {
 
-		Vector3 result;
+		Vector3 result{};
 		result.x = worldTransform_.translation_.x + info.move.x;
 		result.y = worldTransform_.translation_.y + info.move.y;
 		result.z = worldTransform_.translation_.z + info.move.z;
@@ -288,7 +289,7 @@ void Player::ColisionMapBottom(CollisionMapInfo& info) {
 	std::array<Vector3, kNumCorner> positionNew;
 	for (uint32_t i = 0; i < positionNew.size(); ++i) {
 
-		Vector3 result;
+		Vector3 result{};
 		result.x = worldTransform_.translation_.x + info.move.x;
 		result.y = worldTransform_.translation_.y + info.move.y;
 		result.z = worldTransform_.translation_.z + info.move.z;
@@ -330,7 +331,7 @@ void Player::ColisionMapRight(CollisionMapInfo& info) {
 	std::array<Vector3, kNumCorner> positionNew;
 	for (uint32_t i = 0; i < positionNew.size(); ++i) {
 
-		Vector3 result;
+		Vector3 result{};
 		result.x = worldTransform_.translation_.x + info.move.x;
 		result.y = worldTransform_.translation_.y + info.move.y;
 		result.z = worldTransform_.translation_.z + info.move.z;
@@ -371,7 +372,7 @@ void Player::ColisionMapRight(CollisionMapInfo& info) {
 	 std::array<Vector3, kNumCorner> positionNew;
 	 for (uint32_t i = 0; i < positionNew.size(); ++i) {
 
-		 Vector3 result;
+		 Vector3 result{};
 		 result.x = worldTransform_.translation_.x + info.move.x;
 		 result.y = worldTransform_.translation_.y + info.move.y;
 		 result.z = worldTransform_.translation_.z + info.move.z;
@@ -412,7 +413,7 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 	    {-kWidth / 2.0f, +kHeight / 2.0f, 0}, //  kLeftTop
 	};
 
-	Vector3 result;
+	Vector3 result{};
 	result.x = center.x + offsetTable[static_cast<uint32_t>(corner)].x;
 	result.y = center.y + offsetTable[static_cast<uint32_t>(corner)].y;
 	result.z = center.z + offsetTable[static_cast<uint32_t>(corner)].z;

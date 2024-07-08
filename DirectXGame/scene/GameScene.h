@@ -49,9 +49,16 @@ public: // メンバ関数
 	void Draw();
 	void GenerateBlocks();
 	std::vector<std::vector<WorldTransform*>>worldTransformBlocks_;
-
+	//当たり判定
 	void CheckAllCollisions();
-
+	//エネミーの更新
+	void UpdateEnemys();
+	//カメラ類の更新
+	void UpdateCameras();
+	//フェーズの変更
+	void ChangePhase();
+	////デスフラグのgetter
+	//bool IsDead() const { return isDead_; }
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -89,6 +96,15 @@ private: // メンバ変数
 	//死亡時パーティクル
 	DeathParticles* deathParticles_ = nullptr;
 	Model* modelDeathParticles_ = nullptr;
+	////死亡フラグ
+	//bool isDead_ = false;
+	//ゲームのフェーズ
+	enum class Phase {
+		kPlay,//ゲームプレイ
+		kDeath,//デス演出
+	};
+	//ゲームの現在フェーズ
+	Phase phase_;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
