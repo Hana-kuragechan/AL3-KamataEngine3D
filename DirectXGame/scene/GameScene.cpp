@@ -22,6 +22,7 @@ GameScene::~GameScene() {
 	delete player_;
 	delete enemy_;
 	delete deathParticles_;
+
 }
 
 void GameScene::Initialize() {
