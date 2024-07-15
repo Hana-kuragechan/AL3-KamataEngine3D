@@ -138,7 +138,9 @@ void GameScene::Update() {
 				worldTransformBlock->TransferMatrix();
 			}
 		}
-	
+		if (deathParticles_ && deathParticles_->IsFinished()) {
+			finished_ = true;
+		}
 		break;
 	}
 

@@ -13,5 +13,9 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
-
+	//終了フラグのgetter
+	bool IsFinished() const { return finished_; }
+	//終了フラグ
+	bool finished_ = false;
+	
 };
