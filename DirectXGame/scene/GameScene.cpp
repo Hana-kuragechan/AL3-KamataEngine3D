@@ -62,9 +62,7 @@ void GameScene::Initialize() {
 	
 	//パーティクル
 	modelDeathParticles_ = Model::CreateFromOBJ("particle", true);
-	/*deathParticles_ = new DeathParticles;
-	deathParticles_->Initialize(modelDeathParticles_, &viewProjection_, playerPosition);*/
-
+	
 	//カメラコントローラー
 	movebleArea_ = {17, 181, 9, 50};
 

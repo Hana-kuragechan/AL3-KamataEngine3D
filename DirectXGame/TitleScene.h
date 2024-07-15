@@ -1,4 +1,7 @@
 #pragma once
+#include "DirectXCommon.h"
+#include"Title.h"
+#include <ViewProjection.h>
 class TitleScene {
 public:
 	/// <summary>
@@ -17,5 +20,11 @@ public:
 	bool IsFinished() const { return finished_; }
 	//終了フラグ
 	bool finished_ = false;
-	
+
+	private:
+	DirectXCommon* dxCommon_ = nullptr;
+	WorldTransform worldTransform_;
+	ViewProjection viewProjection_;
+	Model* modelText = nullptr;
+	Title* title = nullptr;
 };

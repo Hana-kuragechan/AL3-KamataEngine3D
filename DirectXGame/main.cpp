@@ -121,7 +121,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// 各種解放
 	
 	delete titleScene;
-	delete gameScene;
 	// 3Dモデル解放
 	Model::StaticFinalize();
 	audio->Finalize();
