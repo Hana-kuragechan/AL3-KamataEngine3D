@@ -232,6 +232,9 @@ void Player::ColisionMap(CollisionMapInfo& info) {
 	ColisionMapBottom(info);
 	ColisionMapLeft(info);
 	ColisionMapRight(info);
+
+	WallCollision(info);
+	CeilingCollision(info);
 }
 
 // 上の当たり判定
