@@ -111,9 +111,8 @@ void Player::Update() {
 	SwitchingOnGround(info);
 	velocity_ = info.move;
 
-	worldTransform_.translation_.x += velocity_.x;
-	worldTransform_.translation_.y += velocity_.y;
-	worldTransform_.translation_.z += velocity_.z;
+	MoveResult(info);
+	velocity_ = info.move;
 
 	// 旋回制御
 	if (turnTimer_ > 0.0f) {
