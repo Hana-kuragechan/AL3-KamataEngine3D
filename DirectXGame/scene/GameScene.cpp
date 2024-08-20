@@ -138,7 +138,7 @@ void GameScene::Update() {
 			}
 		}
 		if (deathParticles_ && deathParticles_->IsFinished()) {
-			finished_ = true;
+			gameover_ = true;
 		}
 		break;
 	}

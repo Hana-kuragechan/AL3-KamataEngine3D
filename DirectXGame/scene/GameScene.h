@@ -58,7 +58,7 @@ public: // メンバ関数
 	//フェーズの変更
 	void ChangePhase();
 	// 終了フラグのgetter
-	bool IsFinished() const { return finished_; }
+	bool IsGameOver() const { return gameover_; }
 	
 
 private: // メンバ変数
@@ -108,7 +108,7 @@ private: // メンバ変数
 	Phase phase_;
 
 	// 終了フラグ
-	bool finished_ = false;
+	bool gameover_ = false;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

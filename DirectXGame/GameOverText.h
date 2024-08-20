@@ -2,7 +2,8 @@
 #include <Model.h>
 #include <WorldTransform.h>
 #include <cassert>
-class Title {
+class GameOverText {
+
 public:
 	/// <summary>
 	/// 初期化
@@ -26,5 +27,4 @@ private:
 
 	// モデル
 	Model* model_ = nullptr;
-
 };

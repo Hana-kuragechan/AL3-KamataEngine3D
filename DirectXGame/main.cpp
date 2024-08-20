@@ -6,16 +6,19 @@
 #include "PrimitiveDrawer.h"
 #include "TextureManager.h"
 #include"TitleScene.h"
+#include"GameOverScene.h"
 #include "WinApp.h"
 
 GameScene* gameScene = nullptr;
 TitleScene* titleScene = nullptr;
+GameOverScene* gameoverScene = nullptr;
 
 enum class Scene { 
 	kUnknown = 0,
 
 	kTitle,
 	kGame,
+	kGameOver,
 };
 Scene scene = Scene::kUnknown;
 
@@ -78,6 +81,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	scene = Scene::kTitle;
 	titleScene = new TitleScene;
 	titleScene->Initialize();
+
+	gameoverScene = new GameOverScene;
+	gameoverScene->Initialize();
 
 	// メインループ
 	while (true) {
@@ -146,10 +152,21 @@ void ChangeScene() {
 		}
 		break;
 	case Scene::kGame:
-		if (gameScene->IsFinished()) {
-			scene = Scene::kTitle;
+		if (gameScene->IsGameOver()) {
+			scene = Scene::kGameOver;
 			delete gameScene;
 			gameScene = nullptr;
+
+			gameoverScene = new GameOverScene;
+			gameoverScene->Initialize();
+		}
+		break;
+	case Scene::kGameOver:
+		if (gameoverScene->IsFinished()) {
+			scene = Scene::kTitle;
+
+			delete gameoverScene;
+			gameoverScene = nullptr;
 
 			titleScene = new TitleScene;
 			titleScene->Initialize();
@@ -170,6 +187,9 @@ void UpdateScene() {
 	case Scene::kGame:
 		gameScene->Update();
 		break;
+	case Scene::kGameOver:
+		gameoverScene->Update();
+		break;
 	default:
 		break;
 	}
@@ -182,6 +202,9 @@ void DrawScene() {
 		break;
 	case Scene::kGame:
 		gameScene->Draw();
+		break;
+	case Scene::kGameOver:
+		gameoverScene->Draw();
 		break;
 	default:
 		break;
