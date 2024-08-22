@@ -20,6 +20,7 @@ GameScene::~GameScene() {
 	delete modelSkydome_;
 	delete mapChipFild_;
 	delete player_;
+	delete item_;
 	delete enemy_;
 	delete deathParticles_;
 
@@ -51,6 +52,12 @@ void GameScene::Initialize() {
 	Vector3 playerPosition = mapChipFild_->GetMapChipPositionByIndex(2, 18);
 	player_->Initialize(modelPlayer_, &viewProjection_,playerPosition);
 	player_->SetMapChipField(mapChipFild_);
+
+	//アイテム
+	modelItem_ = Model::CreateFromOBJ("AL3_player", true);
+	item_ = new Item();
+	Vector3 itemPosition = mapChipFild_->GetMapChipPositionByIndex(10, 18);
+	item_->Initialize(modelItem_, &viewProjection_, itemPosition);
 
 	//敵
 	modelEnemy_ = Model::CreateFromOBJ("AL3_enemy", true);
@@ -87,6 +94,8 @@ void GameScene::Update() {
 		skydome_->Update();
 		// プレイヤー
 		player_->Update();
+		//アイテム
+		item_->Update();
 		// エネミー
 		UpdateEnemys();
 		// カメラ
@@ -196,6 +205,9 @@ void GameScene::Draw() {
 	if (player_->IsDead() == false) {
 		player_->Draw();
 	}
+	if (item_->IsGet() == false) {
+		item_->Draw();
+	}
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
 	}
@@ -249,8 +261,10 @@ void GameScene::GenerateBlocks() {
 void GameScene::CheckAllCollisions() {
 	#pragma region
 
-	AABB aabb1, aabb2;
+	AABB aabb1, aabb2,aabb3;
 	aabb1 = player_->GetAABB();
+
+	//プレイヤーとエネミー
 	for (Enemy* enemy : enemies_) {
 		aabb2 = enemy->GetAABB();
 		if (IsCollision(aabb1, aabb2)) {
@@ -258,6 +272,14 @@ void GameScene::CheckAllCollisions() {
 			enemy->OnCollosion(player_);
 		}
 	}
+	//プレイヤーとアイテム
+	aabb3 = item_->GetAABB();
+	if (IsCollision(aabb1, aabb3)) {
+		player_->OnCollosion(item_);
+		item_->OnCollosion(player_);
+		
+	}
+	
 	#pragma endregion
 
 }

@@ -115,6 +115,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="GameOverText.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChipField.cpp" />
     <ClCompile Include="math\Vector3.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="GameOverText.h" />
     <ClInclude Include="input\Input.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="MapChipField.h" />
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\Vector2.h" />

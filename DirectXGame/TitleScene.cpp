@@ -14,7 +14,7 @@ void TitleScene::Initialize() {
 }
 
 void TitleScene::Update() {
-	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+	if (Input::GetInstance()->PushKey(DIK_A)) {
 		finished_ = true;
 	}
 	title->Update();

@@ -16,6 +16,7 @@
 #include "Player.h"
 #include"Enemy.h"
 #include"DeathParticles.h"
+#include"Item.h"
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -85,6 +86,9 @@ private: // メンバ変数
 	Player* player_ = nullptr;
 	Model* modelPlayer_ = nullptr;
 	
+	//アイテム
+	Item* item_ = nullptr;
+	Model* modelItem_ = nullptr;
 
 	//敵
 	Enemy* enemy_ = nullptr;

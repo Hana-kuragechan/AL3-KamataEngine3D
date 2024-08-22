@@ -28,7 +28,7 @@ enum Corner {
 
 class MapChipField;
 class Enemy;
-
+class Item;
 class Player {
 public:
 	/// <summary>
@@ -54,6 +54,7 @@ public:
 	Vector3 GetWorldPosition();
 	AABB GetAABB();
 	void OnCollosion(const Enemy*enemy);
+	void OnCollosion(const Item*item);
 	// デスフラグのgetter
 	bool IsDead() const { return isDead_; }
 
