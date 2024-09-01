@@ -99,4 +99,5 @@ private:
 
 	// 死亡フラグ
 	bool isDead_ = false;
+	float starCount = 0.0f;
 };

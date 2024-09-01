@@ -1,31 +1,34 @@
 #include "Audio.h"
 #include "AxisIndicator.h"
 #include "DirectXCommon.h"
+#include "GameClearScene.h"
+#include "GameOverScene.h"
 #include "GameScene.h"
 #include "ImGuiManager.h"
 #include "PrimitiveDrawer.h"
 #include "TextureManager.h"
-#include"TitleScene.h"
-#include"GameOverScene.h"
+#include "TitleScene.h"
 #include "WinApp.h"
 
 GameScene* gameScene = nullptr;
 TitleScene* titleScene = nullptr;
 GameOverScene* gameoverScene = nullptr;
+GameClearScene* gameClearScene = nullptr;
 
-enum class Scene { 
+enum class Scene {
 	kUnknown = 0,
 
 	kTitle,
 	kGame,
 	kGameOver,
+	kGameClear,
 };
 Scene scene = Scene::kUnknown;
 
 void ChangeScene();
 void UpdateScene();
 void DrawScene();
-    // Windowsアプリでのエントリーポイント(main関数)
+// Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WinApp* win = nullptr;
 	DirectXCommon* dxCommon = nullptr;
@@ -34,10 +37,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Audio* audio = nullptr;
 	AxisIndicator* axisIndicator = nullptr;
 	PrimitiveDrawer* primitiveDrawer = nullptr;
-	
+
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
-	win->CreateGameWindow(L"GC2B_10_タムラ_ハナコ_AL3");
+	win->CreateGameWindow(L"GC2B_10_タムラ_ハナコ_Collect");
 
 	// DirectX初期化処理
 	dxCommon = DirectXCommon::GetInstance();
@@ -85,6 +88,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	gameoverScene = new GameOverScene;
 	gameoverScene->Initialize();
 
+	gameClearScene = new GameClearScene;
+	gameClearScene->Initialize();
 	// メインループ
 	while (true) {
 		// メッセージ処理
@@ -113,7 +118,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/*gameScene->Draw();
 		titleScene->Draw();*/
 
-
 		// 軸表示の描画
 		axisIndicator->Draw();
 		// プリミティブ描画のリセット
@@ -125,7 +129,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 
 	// 各種解放
-	
+
 	delete titleScene;
 	// 3Dモデル解放
 	Model::StaticFinalize();
@@ -159,6 +163,16 @@ void ChangeScene() {
 
 			gameoverScene = new GameOverScene;
 			gameoverScene->Initialize();
+		} 
+		else if (gameScene->IsGameClear()) {
+		
+			scene = Scene::kGameClear;
+			delete gameScene;
+			gameScene = nullptr;
+
+			gameClearScene = new GameClearScene;
+			gameClearScene->Initialize();
+
 		}
 		break;
 	case Scene::kGameOver:
@@ -172,11 +186,21 @@ void ChangeScene() {
 			titleScene->Initialize();
 		}
 		break;
+	case Scene::kGameClear:
+		if (gameClearScene->IsFinished()) {
+
+			scene = Scene::kTitle;
+
+			delete gameClearScene;
+			gameClearScene = nullptr;
+
+			titleScene = new TitleScene;
+			titleScene->Initialize();
+		}
+		break;
 	default:
 		break;
 	}
-
-
 }
 
 void UpdateScene() {
@@ -189,6 +213,9 @@ void UpdateScene() {
 		break;
 	case Scene::kGameOver:
 		gameoverScene->Update();
+		break;
+	case Scene::kGameClear: 
+		gameClearScene->Update();
 		break;
 	default:
 		break;
@@ -206,8 +233,10 @@ void DrawScene() {
 	case Scene::kGameOver:
 		gameoverScene->Draw();
 		break;
+	case Scene::kGameClear:
+		gameClearScene->Draw();
+		break;
 	default:
 		break;
 	}
-
 }

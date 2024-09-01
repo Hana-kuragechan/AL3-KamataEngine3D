@@ -11,13 +11,19 @@ void TitleScene::Initialize() {
 	title = new Title;
 	modelText = Model::CreateFromOBJ("title", true);
 	title->Initialize(modelText, &viewProjection_);
+
+	// 天球(背景)
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	skydome_ = new Skydome();
+	skydome_->Initialize(modelSkydome_, &viewProjection_);
 }
 
 void TitleScene::Update() {
-	if (Input::GetInstance()->PushKey(DIK_A)) {
+	if (Input::GetInstance()->PushKey(DIK_RETURN)) {
 		finished_ = true;
 	}
 	title->Update();
+	skydome_->Update();
 }
 
 void TitleScene::Draw() { 
@@ -31,7 +37,7 @@ void TitleScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	///
-
+	skydome_->Draw();
 	title->Draw(); 
 
 	// 3Dオブジェクト描画後処理

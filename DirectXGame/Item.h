@@ -34,4 +34,5 @@ public:
 	static inline const float kHeight = 1.8f;
 
 	bool isGet_ = false;
+	
 };

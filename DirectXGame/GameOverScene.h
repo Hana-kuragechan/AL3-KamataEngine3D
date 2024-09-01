@@ -1,6 +1,7 @@
 #pragma once
 #include "DirectXCommon.h"
 #include"GameOverText.h"
+#include"Skydome.h"
 #include <ViewProjection.h>
 class GameOverScene {
 public:
@@ -27,4 +28,8 @@ private:
 	ViewProjection viewProjection_;
 	Model* modelText = nullptr;
 	GameOverText* gameoverText = nullptr;
+
+	// 天球(背景)
+	Skydome* skydome_ = nullptr;
+	Model* modelSkydome_ = nullptr;
 };

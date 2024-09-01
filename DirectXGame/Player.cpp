@@ -226,7 +226,10 @@ void Player::OnCollosion(const Enemy* enemy) {
 	//velocity_ += Vector3(0,1,0);
 }
 
-void Player::OnCollosion(const Item* item) { (void)item; }
+void Player::OnCollosion(const Item* item) { 
+	(void)item; 
+	starCount++;
+}
 
 void Player::ColisionMap(CollisionMapInfo& info) {
 

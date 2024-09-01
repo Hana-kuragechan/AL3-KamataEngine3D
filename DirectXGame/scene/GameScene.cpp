@@ -14,6 +14,9 @@ GameScene::~GameScene() {
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
+	for (Item* item : items_) {
+		delete item;
+	}
 	worldTransformBlocks_.clear();
 	delete debugCamera_;
 	delete skydome_;
@@ -23,7 +26,6 @@ GameScene::~GameScene() {
 	delete item_;
 	delete enemy_;
 	delete deathParticles_;
-
 }
 
 void GameScene::Initialize() {
@@ -34,44 +36,70 @@ void GameScene::Initialize() {
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 
-	//ブロック
+	// ブロック
 	blockTextureHandle_ = TextureManager::Load("cube/cube.jpg");
 	block_ = Model::Create();
+
 	mapChipFild_ = new MapChipField;
 	mapChipFild_->LoadMapChipcsv("Resources/blocks.csv");
 	GenerateBlocks();
 
-	//天球(背景)
+	// 天球(背景)
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
 
-	//プレイヤー
+	// プレイヤー
 	modelPlayer_ = Model::CreateFromOBJ("AL3_player", true);
 	player_ = new Player();
 	Vector3 playerPosition = mapChipFild_->GetMapChipPositionByIndex(2, 18);
-	player_->Initialize(modelPlayer_, &viewProjection_,playerPosition);
+	player_->Initialize(modelPlayer_, &viewProjection_, playerPosition);
 	player_->SetMapChipField(mapChipFild_);
 
-	//アイテム
-	modelItem_ = Model::CreateFromOBJ("AL3_player", true);
-	item_ = new Item();
-	Vector3 itemPosition = mapChipFild_->GetMapChipPositionByIndex(10, 18);
-	item_->Initialize(modelItem_, &viewProjection_, itemPosition);
+	// アイテム
+	modelItem_ = Model::CreateFromOBJ("star", true);
+	for (int32_t i = 0; i < 6; ++i) {
+		Item* newItem = new Item();
+		Vector3 itemPosition = mapChipFild_->GetMapChipPositionByIndex(10 + i * 4, 18 - i);
+		if (i == 0) {
+			itemPosition = mapChipFild_->GetMapChipPositionByIndex(12,14);
+		} 
+		else if (i == 1) {
+			itemPosition = mapChipFild_->GetMapChipPositionByIndex(25,6);
+		}
+		else if (i == 2) {
+			itemPosition = mapChipFild_->GetMapChipPositionByIndex(30,7);
+		} 
+		else if (i == 3) {
+			itemPosition = mapChipFild_->GetMapChipPositionByIndex(34,15);
+		} 
+		else if (i == 4) {
+			itemPosition = mapChipFild_->GetMapChipPositionByIndex(40, 11);
+		} 
+		else if (i == 5) {
+			itemPosition = mapChipFild_->GetMapChipPositionByIndex(46, 18);
+		} 
+		newItem->Initialize(modelItem_, &viewProjection_, itemPosition);
+		items_.push_back(newItem);
+	}
+	modelGoal_ = Model::CreateFromOBJ("goal", true);
+	goal_ = new Item;
+	Vector3 goalPosition = mapChipFild_->GetMapChipPositionByIndex(94, 6);
+	goal_->Initialize(modelGoal_, &viewProjection_, goalPosition);
 
-	//敵
+	// 敵
 	modelEnemy_ = Model::CreateFromOBJ("AL3_enemy", true);
-	for (int32_t i= 0; i < 3; ++i) {
+	for (int32_t i = 0; i < 3; ++i) {
 		Enemy* newEnemy = new Enemy();
-		Vector3 enemyPosition = mapChipFild_->GetMapChipPositionByIndex(10 + i * 4, 18-i);
+		Vector3 enemyPosition = mapChipFild_->GetMapChipPositionByIndex(10 + i * 4, 18 - i);
 		newEnemy->Initialize(modelEnemy_, &viewProjection_, enemyPosition);
 		enemies_.push_back(newEnemy);
 	}
-	
-	//パーティクル
+
+	// パーティクル
 	modelDeathParticles_ = Model::CreateFromOBJ("particle", true);
-	
-	//カメラコントローラー
+
+	// カメラコントローラー
 	movebleArea_ = {17, 181, 9, 50};
 
 	cameraController_ = new CameraController();
@@ -81,26 +109,28 @@ void GameScene::Initialize() {
 	cameraController_->Reset();
 	debugCamera_ = new DebugCamera(1280, 720);
 
-	//ゲームプレイフェーズから開始
+	// ゲームプレイフェーズから開始
 	phase_ = Phase::kPlay;
 }
 
 void GameScene::Update() {
 
-	switch (phase_) { 
+	switch (phase_) {
 
 	case Phase::kPlay:
 		// 天球
 		skydome_->Update();
 		// プレイヤー
 		player_->Update();
-		//アイテム
-		item_->Update();
+		// アイテム
+		UpdateItems();
+		//ゴール
+		goal_->Update();
 		// エネミー
 		UpdateEnemys();
 		// カメラ
 		UpdateCameras();
-		//ブロック
+		// ブロック
 		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 			for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 				if (!worldTransformBlock)
@@ -110,7 +140,7 @@ void GameScene::Update() {
 				worldTransformBlock->TransferMatrix();
 			}
 		}
-		//当たり判定
+		// 当たり判定
 		CheckAllCollisions();
 
 		if (player_->IsDead() == true) {
@@ -118,9 +148,8 @@ void GameScene::Update() {
 			const Vector3& deathParticlesPoation = player_->GetWorldPosition();
 			deathParticles_ = new DeathParticles;
 			deathParticles_->Initialize(modelDeathParticles_, &viewProjection_, deathParticlesPoation);
-		
 		}
-		
+
 		break;
 
 	case Phase::kDeath:
@@ -128,13 +157,13 @@ void GameScene::Update() {
 		// 天球
 		skydome_->Update();
 
-		//デスパーティクル
+		// デスパーティクル
 		if (deathParticles_) {
 			deathParticles_->Update();
 		}
-		//エネミー
+		// エネミー
 		UpdateEnemys();
-		//カメラ
+		// カメラ
 		UpdateCameras();
 		// ブロック
 		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -151,10 +180,6 @@ void GameScene::Update() {
 		}
 		break;
 	}
-
-
-	
-
 
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_SPACE)) {
@@ -189,12 +214,14 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	/// 
-	
+	///
+
 	skydome_->Draw();
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+
 			if (!worldTransformBlock)
 				continue;
 
@@ -205,9 +232,12 @@ void GameScene::Draw() {
 	if (player_->IsDead() == false) {
 		player_->Draw();
 	}
-	if (item_->IsGet() == false) {
-		item_->Draw();
+	for (Item* item : items_) {
+		if (item->IsGet() == false) {
+			item->Draw();
+		}
 	}
+	goal_->Draw();
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
 	}
@@ -215,7 +245,6 @@ void GameScene::Draw() {
 	if (deathParticles_) {
 		deathParticles_->Draw();
 	}
-	
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
@@ -228,7 +257,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
 	/// </summary>
-
+	
 	// スプライト描画後処理
 	Sprite::PostDraw();
 
@@ -259,35 +288,45 @@ void GameScene::GenerateBlocks() {
 }
 
 void GameScene::CheckAllCollisions() {
-	#pragma region
+#pragma region
 
-	AABB aabb1, aabb2,aabb3;
-	aabb1 = player_->GetAABB();
+	AABB playerAABB, enemyAABB, starAABB,goalAABB;
+	playerAABB = player_->GetAABB();
+	goalAABB = goal_->GetAABB();
 
-	//プレイヤーとエネミー
+	if (IsCollision(playerAABB, goalAABB)) {
+		gameclear_ = true;
+	}
+
+	// プレイヤーとエネミー
 	for (Enemy* enemy : enemies_) {
-		aabb2 = enemy->GetAABB();
-		if (IsCollision(aabb1, aabb2)) {
+		enemyAABB = enemy->GetAABB();
+		if (IsCollision(playerAABB, enemyAABB)) {
 			player_->OnCollosion(enemy);
 			enemy->OnCollosion(player_);
 		}
 	}
-	//プレイヤーとアイテム
-	aabb3 = item_->GetAABB();
-	if (IsCollision(aabb1, aabb3)) {
-		player_->OnCollosion(item_);
-		item_->OnCollosion(player_);
-		
+	// プレイヤーとアイテム
+	for (Item* item : items_) {
+		starAABB = item->GetAABB();
+		if (IsCollision(playerAABB, starAABB)) {
+			player_->OnCollosion(item);
+			item->OnCollosion(player_);
+		}
 	}
-	
-	#pragma endregion
 
+#pragma endregion
 }
 
 void GameScene::UpdateEnemys() {
 	// エネミー
 	for (Enemy* enemy : enemies_) {
 		enemy->Update();
+	}
+}
+void GameScene::UpdateItems() {
+	for (Item* item : items_) {
+		item->Update();
 	}
 }
 
@@ -316,5 +355,4 @@ void GameScene::ChangePhase() {
 	case Phase::kDeath:
 		break;
 	}
-
 }

@@ -1,33 +1,32 @@
-#include "GameOverScene.h"
+#include "GameClearScene.h"
 #include <Input.h>
 #include <cassert>
-void GameOverScene::Initialize() {
+void GameClearScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance();
 
 	worldTransform_.Initialize();
 	viewProjection_.Initialize();
 	// テキスト
-	gameoverText = new GameOverText;
-	modelText = Model::CreateFromOBJ("gameoverText", true);
-	gameoverText->Initialize(modelText, &viewProjection_);
+	gameClearText = new GameClearText;
+	modelText = Model::CreateFromOBJ("gameClearText", true);
+	gameClearText->Initialize(modelText, &viewProjection_);
 
 	// 天球(背景)
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
-
 }
 
-void GameOverScene::Update() {
+void GameClearScene::Update() {
 
 	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 		finished_ = true;
 	}
-	gameoverText->Update();
+	gameClearText->Update();
 	skydome_->Update();
 }
 
-void GameOverScene::Draw() {
+void GameClearScene::Draw() {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 #pragma region 3Dオブジェクト描画
@@ -39,12 +38,9 @@ void GameOverScene::Draw() {
 	/// </summary>
 	///
 	skydome_->Draw();
-	gameoverText->Draw();
+	gameClearText->Draw();
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
-
-
-
 }

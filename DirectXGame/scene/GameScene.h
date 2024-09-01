@@ -54,12 +54,15 @@ public: // メンバ関数
 	void CheckAllCollisions();
 	//エネミーの更新
 	void UpdateEnemys();
+	//アイテムの更新
+	void UpdateItems();
 	//カメラ類の更新
 	void UpdateCameras();
 	//フェーズの変更
 	void ChangePhase();
 	// 終了フラグのgetter
 	bool IsGameOver() const { return gameover_; }
+	bool IsGameClear() const { return gameclear_; }
 	
 
 private: // メンバ変数
@@ -89,6 +92,10 @@ private: // メンバ変数
 	//アイテム
 	Item* item_ = nullptr;
 	Model* modelItem_ = nullptr;
+	std::list<Item*> items_;
+	//ゴール
+	Item* goal_ = nullptr;
+	Model* modelGoal_ = nullptr;
 
 	//敵
 	Enemy* enemy_ = nullptr;
@@ -113,6 +120,7 @@ private: // メンバ変数
 
 	// 終了フラグ
 	bool gameover_ = false;
+	bool gameclear_ = false;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

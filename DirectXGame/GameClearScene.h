@@ -1,10 +1,11 @@
 #pragma once
 #include "DirectXCommon.h"
-#include"Title.h"
+#include "GameClearText.h"
 #include"Skydome.h"
 #include <ViewProjection.h>
-class TitleScene {
-public:
+class GameClearScene {
+
+	public:
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -17,18 +18,20 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
-	//終了フラグのgetter
+	// 終了フラグのgetter
 	bool IsFinished() const { return finished_; }
-	//終了フラグ
+	// 終了フラグ
 	bool finished_ = false;
 
-	private:
+private:
 	DirectXCommon* dxCommon_ = nullptr;
 	WorldTransform worldTransform_;
 	ViewProjection viewProjection_;
 	Model* modelText = nullptr;
-	Title* title = nullptr;
+	GameClearText* gameClearText = nullptr;
 
+
+	
 	// 天球(背景)
 	Skydome* skydome_ = nullptr;
 	Model* modelSkydome_ = nullptr;
